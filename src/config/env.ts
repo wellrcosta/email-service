@@ -22,4 +22,9 @@ export const env = {
 
   maxEmailsPerMinute: Number(process.env.MAX_EMAILS_PER_MINUTE) || 100,
   maxRetries: Number(process.env.MAX_RETRIES) || 3,
+
+  sendgridApiKey: process.env.SENDGRID_API_KEY || "",
+  sendgridFromEmail: process.env.SENDGRID_FROM_EMAIL || "",
+
+  emailProvider: process.env.EMAIL_PROVIDER || "smtp", // "smtp" or "sendgrid"
 };

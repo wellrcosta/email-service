@@ -1,4 +1,4 @@
-import { SMTPProvider } from "./infra/providers/SMTPProvider";
+import { getEmailProvider } from "./infra/email/EmailProviderFactory";
 import { RabbitMQConsumer } from "./infra/queues/RabbitMQConsumer";
 import { DeadLetterPublisher } from "./infra/queues/DeadLetterPublisher";
 import { RateLimiter } from "./infra/redis/RateLimiter";
@@ -11,7 +11,7 @@ import amqp from "amqplib";
 
 async function main() {
   try {
-    const emailProvider = new SMTPProvider();
+    const emailProvider = getEmailProvider();
     const sendEmailUseCase = new SendEmailUseCase(emailProvider);
     const retryHandler = new RetryHandler();
     const rateLimiter = new RateLimiter();
