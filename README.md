@@ -33,7 +33,7 @@ A lightweight and production-ready microservice for sending emails using **Rabbi
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-repo/email-service.git
+git clone https://github.com/wellrcosta/email-service.git
 cd email-service
 ```
 
