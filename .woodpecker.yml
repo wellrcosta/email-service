@@ -7,9 +7,6 @@ steps:
 
   - name: Docker Build & Push
     image: plugins/docker
-    privileged: true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock 
     settings:
       repo: ${DOCKER_USER}/${CI_REPO_NAME}
       tags:
