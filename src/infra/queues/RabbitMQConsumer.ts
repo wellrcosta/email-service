@@ -16,9 +16,11 @@ export class RabbitMQConsumer {
     private readonly sendEmailUseCase: SendEmailUseCase,
     private readonly retryHandler: RetryHandler,
     private readonly deadLetterPublisher: DeadLetterPublisher,
-    channel: Channel
+    channel: Channel,
+    rateLimiter?: RateLimiter
   ) {
     this.channel = channel;
+    this.rateLimiter = rateLimiter ?? new RateLimiter();
   }
 
   async connect(): Promise<void> {

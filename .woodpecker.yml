@@ -1,0 +1,17 @@
+steps:
+  - name: Install & Test
+    image: node:20
+    commands:
+      - npm ci
+      - npm run test -- --coverage
+
+  - name: Docker Build & Push
+    image: plugins/docker
+    settings:
+      repo: ${DOCKER_USER}/${CI_REPO_NAME}
+      tags:
+        - latest
+      username:
+        from_secret: DOCKER_USER
+      password:
+        from_secret: DOCKER_TOKEN
