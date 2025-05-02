@@ -41,7 +41,7 @@ steps:
       - apk add --no-cache openssh
       - echo "$SSH_PRIVATE_KEY" > /tmp/id_ed25519
       - chmod 600 /tmp/id_ed25519
-      - ssh -i /tmp/id_ed25519 -o StrictHostKeyChecking=no root@192.168.1.120 "bash /opt/deploy/deploy.sh $CI_REPO_NAME \$DEPLOY_PORT /opt/deploy/apps-configs/$CI_REPO_NAME/.env"
+      - ssh -i /tmp/id_ed25519 -o StrictHostKeyChecking=no root@192.168.1.120 "bash /opt/deploy/deploy.sh $CI_REPO_NAME $DEPLOY_PORT /opt/deploy/apps-configs/$CI_REPO_NAME/.env"
     when:
       branch:
         - main
