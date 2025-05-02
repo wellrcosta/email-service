@@ -34,7 +34,7 @@ A lightweight and production-ready microservice for sending emails using **Rabbi
 
 ```bash
 git clone https://github.com/wellrcosta/email-service.git
-cd email-service
+cd email-service 
 ```
 
 ### 2. Configure environment variables
@@ -45,7 +45,7 @@ Create a `.env` file based on `.env.example`:
 cp .env.example .env
 ```
 
-Edit `.env` to match your SMTP provider and queue configurations.
+Edit `.env` to match your SMTP or SendGrid provider and queue configurations.
 
 ---
 
