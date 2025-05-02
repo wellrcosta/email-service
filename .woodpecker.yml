@@ -6,9 +6,12 @@ steps:
       - npm run test -- --coverage
 
   - name: Docker Build & Push
-    image: woodpeckerci/plugin-kaniko
+    image: plugins/docker
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock 
     settings:
-      repo: wellrcosta/email-service
+      repo: ${DOCKER_USER}/${CI_REPO_NAME}
       tags:
         - latest
       username:
