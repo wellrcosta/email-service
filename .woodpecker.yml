@@ -9,12 +9,12 @@ steps:
     image: alpine
     commands:
       - echo "Docker user: ${DOCKER_USER}"
-      - echo "Repo: ${DOCKER_USER}/${CI_REPO_NAME}"
+      - echo "Repo: wellrcosta/${CI_REPO_NAME}"
 
   - name: Docker Build & Push
     image: woodpeckerci/plugin-kaniko
     settings:
-      repo: ${DOCKER_USER}/${CI_REPO_NAME}
+      repo: wellrcosta/${CI_REPO_NAME}
       tags:
         - latest
       username:
