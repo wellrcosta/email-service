@@ -1,14 +1,16 @@
-pipeline:
-  build-and-push:
-    image: plugins/docker
+steps:
+  - name: Docker Build & Push
+    image: docker:24.0.7-cli
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock 
+      - /var/run/docker.sock:/var/run/docker.sock
     settings:
       repo: ${DOCKER_USER}/${CI_REPO_NAME}
-      tags: latest
-      username:
+    commands:
+      - echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+      - docker build -t ${DOCKER_USER}/${CI_REPO_NAME}:latest .
+      - docker push ${DOCKER_USER}/${CI_REPO_NAME}:latest
+    environment:
+      DOCKER_USER:
         from_secret: DOCKER_USER
-      password:
+      DOCKER_TOKEN:
         from_secret: DOCKER_TOKEN
-  when:
-    event: push
