@@ -1,13 +1,30 @@
 steps:
+  - name: Install & Test
+    image: node:20
+    commands:
+      - npm ci
+      - npm run test -- --coverage
+    when:
+      branch:
+        - main
+      event:
+        - push
+
   - name: Docker Build & Push
-    image: woodpeckerci/plugin-kaniko
-    settings:
-      dockerfile: Dockerfile
-      context: .
-      repo: ${DOCKER_USER}/${CI_REPO_NAME}
-      tags:
-        - latest
-      username:
+    image: docker:24.0.7-cli
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+      - docker build -t $DOCKER_USER/$CI_REPO_NAME:latest .
+      - docker push $DOCKER_USER/$CI_REPO_NAME:latest
+    environment:
+      DOCKER_USER:
         from_secret: DOCKER_USER
-      password:
+      DOCKER_TOKEN:
         from_secret: DOCKER_TOKEN
+    when:
+      branch:
+        - main
+      event:
+        - push
