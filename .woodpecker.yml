@@ -7,6 +7,7 @@ steps:
 
   - name: Docker Build & Push
     image: plugins/docker
+    privileged: true
     settings:
       repo: ${DOCKER_USER}/${CI_REPO_NAME}
       tags:
