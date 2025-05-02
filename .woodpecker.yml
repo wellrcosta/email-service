@@ -8,7 +8,7 @@ steps:
   - name: Docker Build & Push
     image: woodpeckerci/plugin-kaniko
     settings:
-      repo: wellrcosta/${CI_REPO_NAME}
+      repo: wellrcosta/email-service
       tags:
         - latest
       username:
