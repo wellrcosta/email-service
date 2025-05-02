@@ -8,6 +8,23 @@ import { Channel, ConsumeMessage } from "amqplib";
 import Redis from "ioredis";
 import { rabbitmqConfig } from "../src/config/rabbitmq";
 
+// Mock winston logger
+jest.mock("winston", () => ({
+  format: {
+    combine: jest.fn(),
+    timestamp: jest.fn(),
+    json: jest.fn(),
+  },
+  createLogger: jest.fn().mockReturnValue({
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+  }),
+  transports: {
+    Console: jest.fn(),
+  },
+}));
+
 jest.mock("../src/middlewares/ValidateEmailPayload", () => ({
   ValidateEmailPayload: {
     validate: jest.fn(),
@@ -21,6 +38,11 @@ jest.mock("ioredis", () => {
   };
   return jest.fn(() => mockRedis);
 });
+
+// Mock console.log to prevent logs from showing in tests
+global.console.log = jest.fn();
+global.console.error = jest.fn();
+global.console.warn = jest.fn();
 
 describe("RabbitMQConsumer", () => {
   let consumer: RabbitMQConsumer;
