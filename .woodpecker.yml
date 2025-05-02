@@ -5,6 +5,12 @@ steps:
       - npm ci
       - npm run test -- --coverage
 
+  - name: debug
+  image: alpine
+  commands:
+    - echo "Docker user: ${DOCKER_USER}"
+    - echo "Repo: ${DOCKER_USER}/${CI_REPO_NAME}"
+
   - name: Docker Build & Push
     image: woodpeckerci/plugin-kaniko
     settings:
