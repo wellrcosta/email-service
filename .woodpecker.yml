@@ -10,6 +10,33 @@ steps:
       event:
         - push
 
+  - name: SonarCloud Analysis
+    image: node:20-bullseye
+    environment:
+      SONAR_TOKEN:
+        from_secret: SONAR_TOKEN
+      SONAR_PROJECT_KEY:
+        from_secret: SONAR_PROJECT_KEY
+      SONAR_ORG:
+        from_secret: SONAR_ORG
+    commands:
+      - apt-get update && apt-get install -y openjdk-17-jre curl unzip
+      - curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+      - unzip sonar-scanner.zip && mv sonar-scanner-* sonar-scanner
+      - export PATH="$PATH:$(pwd)/sonar-scanner/bin"
+      - sonar-scanner \
+        -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+        -Dsonar.organization=$SONAR_ORG \
+        -Dsonar.host.url=https://sonarcloud.io \
+        -Dsonar.login=$SONAR_TOKEN \
+        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+        -Dsonar.qualitygate.wait=true
+    when:
+      branch:
+        - main
+      event:
+        - push
+
   - name: Docker Build & Push
     image: docker:24.0.7-cli
     volumes:
