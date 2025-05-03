@@ -16,13 +16,13 @@ steps:
       CODECOV_TOKEN:
         from_secret: CODECOV_TOKEN
     commands:
-    - npm install -g codecov
-    - codecov --token $CODECOV_TOKEN --file coverage/lcov.info --fail-under 60
-  when:
-    branch:
-      - main
-    event:
-      - push
+      - npm install -g codecov
+      - codecov --token $CODECOV_TOKEN --file coverage/lcov.info --fail-under 60
+    when:
+      branch:
+        - main
+      event:
+        - push
 
   - name: Docker Build & Push
     image: docker:24.0.7-cli
