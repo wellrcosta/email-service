@@ -11,13 +11,15 @@ steps:
         - push
 
   - name: Upload Coverage to Codecov
-    image: node:20
+    image: alpine:latest
     environment:
       CODECOV_TOKEN:
         from_secret: CODECOV_TOKEN
     commands:
-      - npm install -g codecov
-      - codecov --token $CODECOV_TOKEN --file coverage/lcov.info --fail-under 60
+      - apk add --no-cache curl bash
+      - curl -Os https://uploader.codecov.io/latest/linux/codecov
+      - chmod +x codecov
+      - ./codecov --token $CODECOV_TOKEN --fail-under=60 --file=coverage/lcov.info
     when:
       branch:
         - main
