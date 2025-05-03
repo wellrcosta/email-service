@@ -10,27 +10,13 @@ steps:
       event:
         - push
 
-  - name: SonarCloud Analysis
-    image: node:20-bullseye
+  - name: Upload Coverage to Codecov
+    image: codecov/codecov-cli:latest
     environment:
-      SONAR_TOKEN:
-        from_secret: SONAR_TOKEN
-      SONAR_PROJECT_KEY:
-        from_secret: SONAR_PROJECT_KEY
-      SONAR_ORG:
-        from_secret: SONAR_ORG
+      CODECOV_TOKEN:
+        from_secret: CODECOV_TOKEN
     commands:
-      - apt-get update && apt-get install -y openjdk-17-jre curl unzip
-      - curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-      - unzip sonar-scanner.zip && mv sonar-scanner-* sonar-scanner
-      - export PATH="$PATH:$(pwd)/sonar-scanner/bin"
-      - sonar-scanner \
-          -Dsonar.projectKey=$SONAR_PROJECT_KEY \
-          -Dsonar.organization=$SONAR_ORG \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=$SONAR_TOKEN \
-          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-          -Dsonar.qualitygate.wait=true
+      - codecov --token $CODECOV_TOKEN --file coverage/lcov.info --fail-under 60
     when:
       branch:
         - main
