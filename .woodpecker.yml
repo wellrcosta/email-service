@@ -1,4 +1,4 @@
-pipeline:
+steps:
   debug-files:
     name: Debug Files
     image: alpine
