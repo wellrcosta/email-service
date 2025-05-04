@@ -1,11 +1,4 @@
 steps:
-  debug-files:
-    name: Debug Files
-    image: alpine
-    commands:
-      - ls
-      - ls -la /woodpecker/src/github.com/wellrcosta/email-service # Lista os arquivos para depuração
-
   deploy-k8s:
     name: Deploy to Kubernetes
     image: lachlanevenson/k8s-kubectl:latest
@@ -19,5 +12,6 @@ steps:
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
       - kubectl cluster-info
       - cd /woodpecker/src/github.com/wellrcosta/email-service
-      - ls -la # Lista os arquivos para garantir que o Deployment.yaml está no diretório
-      - kubectl apply -f /woodpecker/src/github.com/wellrcosta/email-service/Deployment.yaml # Caminho absoluto para garantir que o kubectl encontre o arquivo
+      - ls -la # Verifica os arquivos no diretório
+      - chmod -R 755 /woodpecker/src/github.com/wellrcosta/email-service # Garantir permissões
+      - kubectl apply -f /woodpecker/src/github.com/wellrcosta/email-service/Deployment.yaml # Aplica o deployment
