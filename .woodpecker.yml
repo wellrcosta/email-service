@@ -52,8 +52,9 @@ steps:
       KUBECONFIG:
         from_secret: KUBE_CONFIG
     commands:
+      - mkdir -p /root/.kube
       - echo "$KUBE_CONFIG" > /root/.kube/config
-      - kubectl apply -f deployment.yaml
+      - kubectl --kubeconfig=$KUBE_CONFIG apply -f deployment.yaml
     when:
       branch:
         - main
