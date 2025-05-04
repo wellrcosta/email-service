@@ -9,7 +9,7 @@ steps:
     name: Deploy to Kubernetes
     image: lachlanevenson/k8s-kubectl:latest
     volumes:
-      - /woodpecker/src:/woodpecker/src
+      - /woodpecker/src:/mnt/src  # Mapeia o diretório para outro caminho dentro do container
     environment:
       KUBECONFIG_CONTENT:
         from_secret: KUBE_CONFIG
@@ -17,6 +17,6 @@ steps:
       - mkdir -p /root/.kube
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
       - kubectl cluster-info
-      - cd /woodpecker/src/github.com/wellrcosta/email-service
-      - ls -la
+      - cd /mnt/src/github.com/wellrcosta/email-service
+      - ls -la  # Verifica o conteúdo do diretório dentro do container
       - kubectl apply -f Deployment.yaml
