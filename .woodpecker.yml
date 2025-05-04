@@ -19,6 +19,5 @@ steps:
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
       - kubectl cluster-info
       - cd /woodpecker/src/github.com/wellrcosta/email-service
-      - ls
-      - ls -la # Lista os arquivos para verificar se tudo está no lugar
-      - kubectl apply -f Deployment.yaml # Aplica o deployment
+      - ls -la # Lista os arquivos para garantir que o Deployment.yaml está no diretório
+      - kubectl apply -f /woodpecker/src/github.com/wellrcosta/email-service/Deployment.yaml # Caminho absoluto para garantir que o kubectl encontre o arquivo
