@@ -3,7 +3,7 @@ steps:
     name: Debug Files
     image: alpine
     commands:
-      - ls -la /woodpecker/src
+      - ls -la /woodpecker/src/github.com/wellrcosta/email-service
 
   deploy-k8s:
     name: Deploy to Kubernetes
@@ -17,5 +17,5 @@ steps:
       - mkdir -p /root/.kube
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
       - kubectl cluster-info
-      - cd /workspace/github.com/${DOCKER_USER}/${CI_REPO_NAME}
+      - cd /workspace/github.com/wellrcosta/${CI_REPO_NAME}
       - kubectl apply -f deployment.yaml
