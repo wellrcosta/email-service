@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-service
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: email-service
+  template:
+    metadata:
+      labels:
+        app: email-service
+    spec:
+      containers:
+        - name: email-service
+          image: wellrcosta/email-service
+          envFrom:
+            - configMapRef:
+                name: config-map-global
+            - configMapRef:
+                name: email-service-config
+          ports:
+            - containerPort: 3000
