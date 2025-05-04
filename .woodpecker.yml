@@ -58,3 +58,4 @@ steps:
         - main
       event:
         - push
+        - deploy
