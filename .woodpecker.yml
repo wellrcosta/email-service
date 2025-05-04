@@ -17,5 +17,9 @@ steps:
       - mkdir -p /root/.kube
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
       - kubectl cluster-info
+      - ls -la /workspace
+      - ls -la /workspace/github.com
+      - ls -la /workspace/github.com/wellrcosta
+      - echo "${CI_REPO_NAME}"
       - cd /workspace/github.com/wellrcosta/${CI_REPO_NAME}
       - kubectl apply -f deployment.yaml
