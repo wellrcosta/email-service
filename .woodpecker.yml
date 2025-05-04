@@ -18,4 +18,5 @@ steps:
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
       - kubectl cluster-info
       - cd /woodpecker/src/github.com/wellrcosta/email-service
-      - kubectl apply -f deployment.yaml
+      - ls -la
+      - kubectl apply -f Deployment.yaml
