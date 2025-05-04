@@ -54,7 +54,9 @@ steps:
     commands:
       - mkdir -p /root/.kube
       - echo "$KUBE_CONFIG" > /root/.kube/config
-      - kubectl --kubeconfig=$KUBE_CONFIG apply -f deployment.yaml
+      - cat /root/.kube/config
+      - kubectl --kubeconfig=/root/.kube/config version
+      - kubectl --kubeconfig=/root/.kube/config apply -f deployment.yaml
     when:
       branch:
         - main
