@@ -1,13 +1,15 @@
-steps:
-  - name: Debug Files
-  image: alpine
-  commands:
-    - ls -la /woodpecker/src
+pipeline:
+  debug-files:
+    name: Debug Files
+    image: alpine
+    commands:
+      - ls -la /woodpecker/src
 
-  - name: Deploy to Kubernetes
+  deploy-k8s:
+    name: Deploy to Kubernetes
     image: lachlanevenson/k8s-kubectl:latest
     volumes:
-    - /woodpecker/src:/workspace
+      - /woodpecker/src:/workspace
     environment:
       KUBECONFIG_CONTENT:
         from_secret: KUBE_CONFIG
