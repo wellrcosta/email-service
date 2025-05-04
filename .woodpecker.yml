@@ -1,65 +1,11 @@
 steps:
-  - name: Install & Test
-    image: node:20
-    commands:
-      - npm ci
-      - npm run test -- --coverage
-    when:
-      branch:
-        - main
-      event:
-        - push
-
-  - name: Upload Coverage to Codecov
-    image: alpine:latest
-    environment:
-      CODECOV_TOKEN:
-        from_secret: CODECOV_TOKEN
-    commands:
-      - apk add --no-cache curl bash
-      - curl -Os https://uploader.codecov.io/latest/linux/codecov
-      - chmod +x codecov
-      - ./codecov --token $CODECOV_TOKEN --fail-under=60 --file=coverage/lcov.info
-    when:
-      branch:
-        - main
-      event:
-        - push
-
-  - name: Docker Build & Push
-    image: docker:24.0.7-cli
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    commands:
-      - echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
-      - docker build -t $DOCKER_USER/$CI_REPO_NAME:latest .
-      - docker push $DOCKER_USER/$CI_REPO_NAME:latest
-      - docker rmi ${DOCKER_USER}/${CI_REPO_NAME}:latest || true
-    environment:
-      DOCKER_USER:
-        from_secret: DOCKER_USER
-      DOCKER_TOKEN:
-        from_secret: DOCKER_TOKEN
-    when:
-      branch:
-        - main
-      event:
-        - push
-
   - name: Deploy to Kubernetes
     image: lachlanevenson/k8s-kubectl:latest
     environment:
-      KUBECONFIG:
+      KUBECONFIG_CONTENT:
         from_secret: KUBE_CONFIG
     commands:
       - mkdir -p /root/.kube
-      - echo "$KUBE_CONFIG" > /root/.kube/config
-      - cat /root/.kube/config
-      - kubectl --kubeconfig=/root/.kube/config version
-      - kubectl --kubeconfig=/root/.kube/config apply -f deployment.yaml
-    when:
-      branch:
-        - main
-      event:
-        - push
-        - deploy
+      - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
+      - kubectl cluster-info
+      - kubectl apply -f deployment.yaml
