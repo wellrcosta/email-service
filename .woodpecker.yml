@@ -3,13 +3,14 @@ steps:
     name: Debug Files
     image: alpine
     commands:
-      - ls -la /woodpecker/src/github.com/wellrcosta/email-service
+      - echo "Current directory: $(pwd)" # Verifica o diretório atual
+      - ls -la /woodpecker/src/github.com/wellrcosta/email-service # Lista os arquivos para depuração
 
   deploy-k8s:
     name: Deploy to Kubernetes
     image: lachlanevenson/k8s-kubectl:latest
     volumes:
-      - /woodpecker/src:/mnt/src  # Mapeia o diretório para outro caminho dentro do container
+      - /woodpecker/src:/woodpecker/src
     environment:
       KUBECONFIG_CONTENT:
         from_secret: KUBE_CONFIG
@@ -17,6 +18,7 @@ steps:
       - mkdir -p /root/.kube
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
       - kubectl cluster-info
-      - cd /mnt/src/github.com/wellrcosta/email-service
-      - ls -la  # Verifica o conteúdo do diretório dentro do container
-      - kubectl apply -f Deployment.yaml
+      - cd /woodpecker/src/github.com/wellrcosta/email-service # Certifique-se de que este é o caminho correto
+      - echo "Current directory: $(pwd)" # Verifica o diretório após o cd
+      - ls -la # Lista os arquivos para verificar se tudo está no lugar
+      - kubectl apply -f Deployment.yaml # Aplica o deployment
