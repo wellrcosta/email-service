@@ -50,7 +50,7 @@ steps:
     image: lachlanevenson/k8s-kubectl:latest
     environment:
       KUBECONFIG:
-        from_secret: KUBECONFIG
+        from_secret: KUBE_CONFIG
     commands:
       - kubectl apply -f deployment.yaml
     when:
