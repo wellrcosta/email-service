@@ -9,7 +9,7 @@ steps:
     name: Deploy to Kubernetes
     image: lachlanevenson/k8s-kubectl:latest
     volumes:
-      - /woodpecker/src:/workspace
+      - /woodpecker/src:/woodpecker/src
     environment:
       KUBECONFIG_CONTENT:
         from_secret: KUBE_CONFIG
@@ -17,9 +17,5 @@ steps:
       - mkdir -p /root/.kube
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
       - kubectl cluster-info
-      - ls -la /workspace
-      - ls -la /workspace/github.com
-      - ls -la /workspace/github.com/wellrcosta
-      - echo "${CI_REPO_NAME}"
-      - cd /workspace/github.com/wellrcosta/${CI_REPO_NAME}
+      - cd /woodpecker/src/github.com/wellrcosta/email-service
       - kubectl apply -f deployment.yaml
