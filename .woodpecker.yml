@@ -3,7 +3,7 @@ steps:
     name: Debug Files
     image: alpine
     commands:
-      - echo "Current directory: $(pwd)" # Verifica o diretório atual
+      - ls
       - ls -la /woodpecker/src/github.com/wellrcosta/email-service # Lista os arquivos para depuração
 
   deploy-k8s:
@@ -18,7 +18,7 @@ steps:
       - mkdir -p /root/.kube
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
       - kubectl cluster-info
-      - cd /woodpecker/src/github.com/wellrcosta/email-service # Certifique-se de que este é o caminho correto
+      - cd /woodpecker/src/github.com/wellrcosta/email-service
       - echo "Current directory: $(pwd)" # Verifica o diretório após o cd
       - ls -la # Lista os arquivos para verificar se tudo está no lugar
       - kubectl apply -f Deployment.yaml # Aplica o deployment
