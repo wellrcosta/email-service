@@ -19,6 +19,6 @@ steps:
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
       - kubectl cluster-info
       - cd /woodpecker/src/github.com/wellrcosta/email-service
-      - echo "Current directory: $(pwd)" # Verifica o diretório após o cd
+      - ls
       - ls -la # Lista os arquivos para verificar se tudo está no lugar
       - kubectl apply -f Deployment.yaml # Aplica o deployment
