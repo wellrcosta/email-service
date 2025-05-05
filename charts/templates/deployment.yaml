@@ -42,7 +42,7 @@ spec:
             allowPrivilegeEscalation: false
           startupProbe:
             httpGet:
-              path: {{ .Values.deployment.healthCheckPath | default "/actuator/health" }}
+              path: {{ .Values.deployment.healthCheckPath | default "/health" }}
               port: {{ .Values.deployment.containerPort | default "3000" }}
               scheme: HTTP
             initialDelaySeconds: 10
@@ -51,7 +51,7 @@ spec:
             timeoutSeconds: 3
           readinessProbe:
             httpGet:
-              path: {{ .Values.deployment.healthCheckPath | default "/actuator/health" }}
+              path: {{ .Values.deployment.healthCheckPath | default "/health" }}
               port: {{ .Values.deployment.containerPort | default "3000" }}
               scheme: HTTP
             periodSeconds: 10
@@ -60,7 +60,7 @@ spec:
             timeoutSeconds: 10
           livenessProbe:
             httpGet:
-              path: {{ .Values.deployment.healthCheckPath | default "/actuator/health" }}
+              path: {{ .Values.deployment.healthCheckPath | default "/health" }}
               port: {{ .Values.deployment.containerPort | default "3000" }}
               scheme: HTTP
             periodSeconds: 30
