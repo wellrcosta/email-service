@@ -4,20 +4,13 @@ steps:
     image: alpine
     commands:
       - ls
-      - ls -la $WOODPECKER_SRC/github.com/wellrcosta/email-service # Usa o caminho correto para listar os arquivos
 
-  deploy-k8s:
-    name: Deploy to Kubernetes
-    image: lachlanevenson/k8s-kubectl:latest
-    volumes:
-      - $WOODPECKER_SRC:/woodpecker/src # Usando a variável que garante o caminho correto
+  deploy-with-helm:
+    name: Deploy with Helm
+    image: alpine/helm:3.8.0
     environment:
       KUBECONFIG_CONTENT:
         from_secret: KUBE_CONFIG
     commands:
-      - mkdir -p /root/.kube
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
-      - kubectl cluster-info
-      - cd $WOODPECKER_SRC/github.com/wellrcosta/email-service # Navega para o diretório correto
-      - ls -la # Verifica os arquivos
-      - kubectl apply -f $WOODPECKER_SRC/github.com/wellrcosta/email-service/Deployment.yaml # Aplica o deployment
+      - helm upgrade --install email-service ./charts

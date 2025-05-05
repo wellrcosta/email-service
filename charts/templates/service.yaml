@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace | default "default" }}
+  labels:
+    app: {{ .Values.name }}
+    appVersion: {{ .Values.appVersion }}
+    environment: {{ .Values.environment }}
+spec:
+  selector:
+    app: {{ .Values.name }}
+    name: {{ .Values.name }}
+    environment: {{ .Values.environment }}
+  type: {{ .Values.service.type | default "ClusterIP" }}
+  ports:
+    - name: http
+      port: 80
+      targetPort: {{ .Values.deployment.containerPort | default "container-port" }}
+      protocol: TCP

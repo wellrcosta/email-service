@@ -1,0 +1,8 @@
+Deployed successfully!
+{{- $image := .Values.deployment.image}}
+{{- $tag := .Values.deployment.tag}}
+{{- if $tag}}
+: {{ printf "%s:%s" $image $tag}}
+{{- else}}
+Image deployed: {{ $image}}
+{{end}}
