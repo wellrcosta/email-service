@@ -12,6 +12,6 @@ steps:
       KUBECONFIG_CONTENT:
         from_secret: KUBE_CONFIG
     commands:
-      - mkdir -p /root/.kube/config
+      - mkdir -p /root/.kube
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
       - helm upgrade --install email-service ./charts
