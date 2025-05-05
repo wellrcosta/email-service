@@ -1,9 +1,50 @@
 steps:
-  debug-files:
-    name: Debug Files
-    image: alpine
+  - name: Install & Test
+    image: node:20
     commands:
-      - ls
+      - npm ci
+      - npm run test -- --coverage
+    when:
+      branch:
+        - main
+      event:
+        - push
+
+  - name: Upload Coverage to Codecov
+    image: alpine:latest
+    environment:
+      CODECOV_TOKEN:
+        from_secret: CODECOV_TOKEN
+    commands:
+      - apk add --no-cache curl bash
+      - curl -Os https://uploader.codecov.io/latest/linux/codecov
+      - chmod +x codecov
+      - ./codecov --token $CODECOV_TOKEN --fail-under=60 --file=coverage/lcov.info
+    when:
+      branch:
+        - main
+      event:
+        - push
+
+  - name: Docker Build & Push
+    image: docker:24.0.7-cli
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+      - docker build -t $DOCKER_USER/$CI_REPO_NAME:latest .
+      - docker push $DOCKER_USER/$CI_REPO_NAME:latest
+      - docker rmi ${DOCKER_USER}/${CI_REPO_NAME}:latest || true
+    environment:
+      DOCKER_USER:
+        from_secret: DOCKER_USER
+      DOCKER_TOKEN:
+        from_secret: DOCKER_TOKEN
+    when:
+      branch:
+        - main
+      event:
+        - push
 
   deploy-with-helm:
     name: Deploy with Helm
@@ -14,4 +55,4 @@ steps:
     commands:
       - mkdir -p /root/.kube
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
-      - helm upgrade --install email-service ./charts
+      - helm upgrade --install ${CI_REPO_NAME} ./charts
