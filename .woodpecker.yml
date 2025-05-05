@@ -1,5 +1,6 @@
 steps:
-  - name: Install & Test
+  install-and-test:
+    name: Install & Test
     image: node:20
     commands:
       - npm ci
@@ -10,7 +11,8 @@ steps:
       event:
         - push
 
-  - name: Upload Coverage to Codecov
+  upload-coverage-codecov:
+    name: Upload Coverage to Codecov
     image: alpine:latest
     environment:
       CODECOV_TOKEN:
@@ -26,7 +28,8 @@ steps:
       event:
         - push
 
-  - name: Docker Build & Push
+  docker-build-push:
+    name: Docker Build & Push
     image: docker:24.0.7-cli
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
