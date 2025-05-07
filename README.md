@@ -119,6 +119,8 @@ src/
 ├── middlewares/        # Payload validation
 ├── shared/             # Logger and Graceful shutdown
 └── web/                # Express server for healthcheck
+test/
+├──                     # Where the tests is located
 ```
 
 ---
@@ -176,7 +178,6 @@ Example log:
 - Implement metrics (Prometheus exporter)
 - Support multiple SMTP providers dynamically
 - Circuit Breaker pattern for SMTP failures
-- Add unit tests (Jest)
 
 ---
 
