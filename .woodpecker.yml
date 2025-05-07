@@ -1,7 +1,11 @@
 steps:
   clone:
-    disable: true
-    depth: 1
+    git:
+      image: woodpeckerci/plugin-git
+      settings:
+        depth: 0
+        lfs: true
+        partial: false
 
   install-and-test:
     name: Install & Test
