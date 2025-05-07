@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import { EmailService } from "../../application/services/EmailService";
 import { EmailPayload } from "../../domain/entities/EmailPayload";
 import { smtpConfig } from "../../config/smtp";
+import { Logger } from "../../shared/logger/Logger";
 
 export class SMTPProvider implements EmailService {
   private transporter = nodemailer.createTransport({
@@ -14,6 +15,7 @@ export class SMTPProvider implements EmailService {
   });
 
   async sendEmail(payload: EmailPayload): Promise<void> {
+    Logger.info("Sending email. Payload: ", payload);
     await this.transporter.sendMail({
       from: smtpConfig.from,
       to: payload.to,

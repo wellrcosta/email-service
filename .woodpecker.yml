@@ -59,3 +59,38 @@ steps:
       - mkdir -p /root/.kube
       - echo "$KUBECONFIG_CONTENT" > /root/.kube/config
       - helm upgrade --install ${CI_REPO_NAME} ./charts
+    when:
+      branch:
+        - main
+      event:
+        - push
+
+  notify-discord-success:
+    name: Notify Success
+    image: woodpeckerci/plugin-discord
+    settings:
+      webhook: ${DISCORD_WEBHOOK_URL}
+      message: |
+        ✅ **Build SUCCESS**
+        Repo: `${CI_REPO_NAME}`
+        Branch: `${CI_COMMIT_BRANCH}`
+        Commit: `${CI_COMMIT_SHA:0:7}`
+        Author: `${CI_COMMIT_AUTHOR}`
+        🔗 <${CI_BUILD_LINK}>
+    when:
+      status: [success]
+
+  notify-discord-failure:
+    name: Notify Failure
+    image: woodpeckerci/plugin-discord
+    settings:
+      webhook: ${DISCORD_WEBHOOK_URL}
+      message: |
+        ❌ **Build FAILURE**
+        Repo: `${CI_REPO_NAME}`
+        Branch: `${CI_COMMIT_BRANCH}`
+        Commit: `${CI_COMMIT_SHA:0:7}`
+        Author: `${CI_COMMIT_AUTHOR}`
+        🔗 <${CI_BUILD_LINK}>
+    when:
+      status: [failure]

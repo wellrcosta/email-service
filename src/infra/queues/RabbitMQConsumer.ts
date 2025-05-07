@@ -40,6 +40,7 @@ export class RabbitMQConsumer {
 
           const canSend = await this.rateLimiter.canSend(payload.to);
           if (!canSend) {
+            Logger.error("Rate limit exceeded", { email: payload.to });
             throw new Error("Rate limit exceeded for email: " + payload.to);
           }
 
