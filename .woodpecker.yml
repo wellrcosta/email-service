@@ -1,16 +1,4 @@
-skip_clone: true
-
 steps:
-  clone:
-    image: woodpeckerci/plugin-git
-    settings:
-      depth: 0
-      partial: false
-    when:
-      event:
-        - push
-        - pull_request
-
   install-and-test:
     name: Install & Test
     image: node:20
@@ -93,9 +81,9 @@ steps:
         {{/success}}
 
         📦 Repo: {{repo.name}}
-        🌿 Branch: {{default build.branch "unknown"}}
-        🔖 Commit: {{default (truncate build.commit 7) "none"}}
-        👤 Author: {{default build.author "unknown"}}
+        🌿 Branch: {{commit.branch}}
+        🔖 Commit: [{{truncate commit.sha 7}}](https://github.com/wellrcosta/{{repo.name}}/commit/{{commit.sha}})
+        👤 Author: {{commit.author}}
         🔗 {{build.link}}
     when:
       status: [success, failure]
