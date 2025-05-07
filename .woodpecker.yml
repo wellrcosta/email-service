@@ -1,4 +1,8 @@
 steps:
+  clone:
+    disable: true
+    depth: 1
+
   install-and-test:
     name: Install & Test
     image: node:20
@@ -73,16 +77,17 @@ steps:
         from_secret: DISCORD_WEBHOOK_ID
       webhook_token:
         from_secret: DISCORD_WEBHOOK_TOKEN
-      message: >
+      message: |
         {{#success build.status}}
-        ✅ Build #{{build.number}} succeeded!
+        ✅ **Build #{{build.number}} SUCCEEDED**
         {{else}}
-        ❌ Build #{{build.number}} failed!
+        ❌ **Build #{{build.number}} FAILED**
         {{/success}}
-        Repo: {{repo.name}}
-        Branch: {{build.branch}}
-        Commit: {{truncate build.commit 7}}
-        Author: {{build.author}}
+
+        📦 Repo: {{repo.name}}
+        🌿 Branch: {{default build.branch "unknown"}}
+        🔖 Commit: {{default (truncate build.commit 7) "none"}}
+        👤 Author: {{default build.author "unknown"}}
         🔗 {{build.link}}
     when:
       status: [success, failure]
