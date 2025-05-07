@@ -1,6 +1,5 @@
 steps:
   clone:
-    name: Clone
     image: woodpeckerci/plugin-git
     settings:
       depth: 0
