@@ -1,12 +1,12 @@
-steps:
-  clone:
-    git:
-      image: woodpeckerci/plugin-git
-      settings:
-        depth: 0
-        lfs: true
-        partial: false
+clone:
+  git:
+    image: woodpeckerci/plugin-git
+    settings:
+      depth: 0
+      lfs: true
+      partial: false
 
+steps:
   install-and-test:
     name: Install & Test
     image: node:20
