@@ -65,32 +65,24 @@ steps:
       event:
         - push
 
-  notify-discord-success:
-    name: Notify Success
-    image: woodpeckerci/plugin-discord
+  notify-discord:
+    name: Notify Discord
+    image: appleboy/drone-discord
     settings:
-      webhook: ${DISCORD_WEBHOOK_URL}
-      message: |
-        ✅ **Build SUCCESS**
-        Repo: `${CI_REPO_NAME}`
-        Branch: `${CI_COMMIT_BRANCH}`
-        Commit: `${CI_COMMIT_SHA:0:7}`
-        Author: `${CI_COMMIT_AUTHOR}`
-        🔗 <${CI_BUILD_LINK}>
+      webhook_id:
+        from_secret: DISCORD_WEBHOOK_ID
+      webhook_token:
+        from_secret: DISCORD_WEBHOOK_TOKEN
+      message: >
+        {{#success build.status}}
+        ✅ Build #{{build.number}} succeeded!
+        {{else}}
+        ❌ Build #{{build.number}} failed!
+        {{/success}}
+        Repo: {{repo.name}}
+        Branch: {{build.branch}}
+        Commit: {{truncate build.commit 7}}
+        Author: {{build.author}}
+        🔗 {{build.link}}
     when:
-      status: [success]
-
-  notify-discord-failure:
-    name: Notify Failure
-    image: woodpeckerci/plugin-discord
-    settings:
-      webhook: ${DISCORD_WEBHOOK_URL}
-      message: |
-        ❌ **Build FAILURE**
-        Repo: `${CI_REPO_NAME}`
-        Branch: `${CI_COMMIT_BRANCH}`
-        Commit: `${CI_COMMIT_SHA:0:7}`
-        Author: `${CI_COMMIT_AUTHOR}`
-        🔗 <${CI_BUILD_LINK}>
-    when:
-      status: [failure]
+      status: [success, failure]
